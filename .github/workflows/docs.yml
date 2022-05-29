@@ -1,4 +1,4 @@
-name: Build and Publish to NPM
+name: Build and Publish docs
 
 on:
   push:
@@ -23,7 +23,7 @@ jobs:
         run: npm install
 
       - name: Build
-        run: npm run generate-docs
+        run: npm run build:docs
 
       - name: Publish to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4.3.3
