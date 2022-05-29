@@ -1,5 +1,6 @@
 import { Plugins, showToast } from 'betterdiscord/bdapi';
 import { Banners } from '@/libs/Banners';
+import { Logger } from '@/libs/Logger';
 import semver from 'semver';
 
 export interface UpdaterInterface {
@@ -15,21 +16,27 @@ interface PluginInfo {
   content?: string;
 }
 
+interface UpdaterOptions {
+  updatePath: string;
+  currentVersion: string;
+  showToasts?: boolean;
+}
+
 export class Updater implements UpdaterInterface {
   protected updatePath: string;
   protected currentVersion: string;
   protected remotePluginInfo: PluginInfo;
   protected banners: Banners;
-
-  constructor(updatePath: string, currentVersion: string) {
-    this.updatePath = updatePath;
-    this.currentVersion = currentVersion;
+  protected logger: Logger;
+  protected showToasts: boolean;
+  
+  constructor(options: UpdaterOptions) {
+    this.updatePath = options.updatePath;
+    this.currentVersion = options.currentVersion;
     this.remotePluginInfo = {};
+    this.showToasts = options.showToasts ?? false;
     this.banners = new Banners();
-  }
-
-  protected log(...message: string[]): void {
-    console.log(`%c[PluginUpdater]%c (${process.env.VERSION})%c ${message.join(' ')}`, 'color: lightblue;', 'color: gray', 'color: white');
+    this.logger = new Logger('PluginUpdater', 'lightblue', 'white');
   }
 
   protected async downloadPluginFile(): Promise<void> {
@@ -42,7 +49,7 @@ export class Updater implements UpdaterInterface {
       this.remotePluginInfo.version = pluginText.match(/@version (.*)/)![1];
       this.remotePluginInfo.content = pluginText;
     } catch (err) {
-      this.log('Failed to download plugin file', (err as Error).message);
+      this.logger.log('Failed to download plugin file', (err as Error).message);
     }
   }
 
@@ -55,7 +62,7 @@ export class Updater implements UpdaterInterface {
 
       return semver.gt(this.remotePluginInfo.version, this.currentVersion);
     } catch (err) {
-      this.log('Failed to check for updates', (err as Error).message);
+      this.logger.log('Failed to check for updates', (err as Error).message);
 
       return false;
     }
@@ -81,11 +88,15 @@ export class Updater implements UpdaterInterface {
         });
       });
 
-      showToast(`${this.remotePluginInfo.name} updated`, { type: 'success'});
+      if (this.showToasts) {
+        showToast(`${this.remotePluginInfo.name} updated`, { type: 'success'});
+      }
 
       return true;
     } catch (err) {
-      showToast(`Failed to download and install update for ${this.remotePluginInfo.name}`, { type: 'error'});
+      if (this.showToasts) {
+        showToast(`Failed to download and install update for ${this.remotePluginInfo.name}`, { type: 'error'});
+      }
 
       return false;
     }
