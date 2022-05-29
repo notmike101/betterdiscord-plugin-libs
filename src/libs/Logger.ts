@@ -10,18 +10,18 @@ export class Logger {
   }
 
   public log(...messages) {
-    console.log(`%c[${this.logPrefix}]%c${messages.join(' ')}`, `color: ${this.logPrefixColor};`, `color: ${this.logColor}`);
+    console.log(`%c[${this.logPrefix}] %c${messages.join(' ')}`, `color: ${this.logPrefixColor};`, `color: ${this.logColor}`);
   }
 
   public warn(...messages) {
-    console.warn(`%c[${this.logPrefix}]%c${messages.join(' ')}`, `color: ${this.logPrefixColor};`, `color: ${this.logColor}`);
+    console.warn(`%c[${this.logPrefix}] %c${messages.join(' ')}`, `color: ${this.logPrefixColor};`, `color: ${this.logColor}`);
   }
   
   public error(...messages) {
-    console.error(`%c[${this.logPrefix}]%c${messages.join(' ')}`, `color: ${this.logPrefixColor};`, `color: ${this.logColor}`);
+    console.error(`%c[${this.logPrefix}] %c${messages.join(' ')}`, `color: ${this.logPrefixColor};`, `color: ${this.logColor}`);
   }
   
   public info(...messages) {
-    console.info(`%c[${this.logPrefix}]%c${messages.join(' ')}`, `color: ${this.logPrefixColor};`, `color: ${this.logColor}`);
+    console.info(`%c[${this.logPrefix}] %c${messages.join(' ')}`, `color: ${this.logPrefixColor};`, `color: ${this.logColor}`);
   }
 }
