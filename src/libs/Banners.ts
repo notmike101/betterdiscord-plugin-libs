@@ -19,15 +19,13 @@ export interface BannerOptions {
 }
 
 export interface BannerInterface {
-  bannerContainer: HTMLDivElement;
-  banners: HTMLDivElement[];
   createBanner(content: string, options: BannerOptions): number;
   dismissBanner(bannerId: number): void;
 }
 
 export class Banners implements BannerInterface {
-  public bannerContainer: HTMLDivElement;
-  public banners: HTMLDivElement[];
+  protected bannerContainer: HTMLDivElement;
+  protected banners: HTMLDivElement[];
 
   constructor(bannerContainerId: string = 'plugin-banner-container') {
     this.banners = [];

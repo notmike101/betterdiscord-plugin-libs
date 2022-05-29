@@ -1,4 +1,3 @@
-import { Plugins, showToast } from 'betterdiscord/bdapi';
 import { Banners } from '@/libs/Banners';
 import { Logger } from '@/libs/Logger';
 import semver from 'semver';
@@ -16,9 +15,10 @@ interface PluginInfo {
   content?: string;
 }
 
-interface UpdaterOptions {
+export interface UpdaterOptions {
   updatePath: string;
   currentVersion: string;
+  BdAPI: any;
   showToasts?: boolean;
 }
 
@@ -29,12 +29,14 @@ export class Updater implements UpdaterInterface {
   protected banners: Banners;
   protected logger: Logger;
   protected showToasts: boolean;
-  
+  protected BdAPI: any;
+
   constructor(options: UpdaterOptions) {
     this.updatePath = options.updatePath;
     this.currentVersion = options.currentVersion;
     this.remotePluginInfo = {};
     this.showToasts = options.showToasts ?? false;
+    this.BdAPI = options.BdAPI;
     this.banners = new Banners();
     this.logger = new Logger('PluginUpdater', 'lightblue', 'white');
   }
@@ -81,7 +83,7 @@ export class Updater implements UpdaterInterface {
       if (!fs) throw new Error('Unable to load `fs` module');
 
       await new Promise((resolve, reject): void => {
-        fs.writeFile(`${Plugins.folder}/${this.remotePluginInfo.fileName}`, this.remotePluginInfo.content, (err: Error): void => {
+        fs.writeFile(`${this.BdAPI.Plugins.folder}/${this.remotePluginInfo.fileName}`, this.remotePluginInfo.content, (err: Error): void => {
           if (err) reject(err);
 
           resolve(true);
@@ -89,13 +91,13 @@ export class Updater implements UpdaterInterface {
       });
 
       if (this.showToasts) {
-        showToast(`${this.remotePluginInfo.name} updated`, { type: 'success'});
+        this.BdAPI.showToast(`${this.remotePluginInfo.name} updated`, { type: 'success'});
       }
 
       return true;
     } catch (err) {
       if (this.showToasts) {
-        showToast(`Failed to download and install update for ${this.remotePluginInfo.name}`, { type: 'error'});
+        this.BdAPI.showToast(`Failed to download and install update for ${this.remotePluginInfo.name}`, { type: 'error'});
       }
 
       return false;

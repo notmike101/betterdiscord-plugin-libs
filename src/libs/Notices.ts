@@ -26,14 +26,12 @@ export interface NoticeOptions {
 }
 
 export interface NoticeInterface {
-  noticeContainer: HTMLDivElement;
-  notices: HTMLDivElement[];
   createNotice(options: NoticeOptions): void;
   dismissNotice(noticeId: number): void;
 }
 
 export class Notices implements NoticeInterface {
-  public noticeContainer: HTMLDivElement;
+  protected noticeContainer: HTMLDivElement;
   protected noticeContainerTopLeft: HTMLDivElement;
   protected noticeContainerTopCenter: HTMLDivElement;
   protected noticeContainerTopRight: HTMLDivElement;
@@ -41,7 +39,7 @@ export class Notices implements NoticeInterface {
   protected noticeContainerBottomCenter: HTMLDivElement;
   protected noticeContainerBottomRight: HTMLDivElement;
   protected noticeTimers: Tween<any>[];
-  public notices: HTMLDivElement[];
+  protected notices: HTMLDivElement[];
 
   constructor(noticeContainerId: string) {
     this.animationLoop = this.animationLoop.bind(this);
