@@ -1,6 +1,6 @@
 import { Banners } from '@/libs/Banners';
 import { Logger } from '@/libs/Logger';
-import semver from 'semver';
+import semverGt from 'semver/functions/gt';
 
 export interface UpdaterInterface {
   isUpdateAvailable(): Promise<boolean>;
@@ -62,7 +62,7 @@ export class Updater implements UpdaterInterface {
 
       await this.downloadPluginFile();
 
-      return semver.gt(this.remotePluginInfo.version, this.currentVersion);
+      return semverGt(this.remotePluginInfo.version, this.currentVersion);
     } catch (err) {
       this.logger.log('Failed to check for updates', (err as Error).message);
 
