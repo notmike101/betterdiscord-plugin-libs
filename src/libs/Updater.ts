@@ -1,11 +1,9 @@
-import { Banners } from '@/libs/Banners';
 import { Logger } from '@/libs/Logger';
 import semverGt from 'semver/functions/gt';
 
 export interface UpdaterInterface {
   isUpdateAvailable(): Promise<boolean>;
   installUpdate(): Promise<boolean>;
-  showUpdateBanner(): void;
 }
 
 interface PluginInfo {
@@ -17,27 +15,22 @@ interface PluginInfo {
 
 export interface UpdaterOptions {
   updatePath: string;
+  storagePath: string;
   currentVersion: string;
-  BdAPI: any;
-  showToasts?: boolean;
 }
 
 export class Updater implements UpdaterInterface {
   protected updatePath: string;
+  protected storagePath: string;
   protected currentVersion: string;
   protected remotePluginInfo: PluginInfo;
-  protected banners: Banners;
   protected logger: Logger;
-  protected showToasts: boolean;
-  protected BdAPI: any;
 
   constructor(options: UpdaterOptions) {
     this.updatePath = options.updatePath;
+    this.storagePath = options.storagePath;
     this.currentVersion = options.currentVersion;
     this.remotePluginInfo = {};
-    this.showToasts = options.showToasts ?? false;
-    this.BdAPI = options.BdAPI;
-    this.banners = new Banners();
     this.logger = new Logger('PluginUpdater', 'lightblue', 'white');
   }
 
@@ -70,12 +63,6 @@ export class Updater implements UpdaterInterface {
     }
   }
 
-  public showUpdateBanner(): void {
-    this.banners.createBanner(`Update available for ${this.remotePluginInfo.name}`, {
-      acceptCallback: this.installUpdate.bind(this),
-    });
-  }
-
   public async installUpdate(): Promise<boolean> {
     try {
       const fs: any = require('fs');
@@ -83,22 +70,16 @@ export class Updater implements UpdaterInterface {
       if (!fs) throw new Error('Unable to load `fs` module');
 
       await new Promise((resolve, reject): void => {
-        fs.writeFile(`${this.BdAPI.Plugins.folder}/${this.remotePluginInfo.fileName}`, this.remotePluginInfo.content, (err: Error): void => {
+        fs.writeFile(`${this.storagePath}/${this.remotePluginInfo.fileName}`, this.remotePluginInfo.content, (err: Error): void => {
           if (err) reject(err);
 
           resolve(true);
         });
       });
 
-      if (this.showToasts) {
-        this.BdAPI.showToast(`${this.remotePluginInfo.name} updated`, { type: 'success'});
-      }
-
       return true;
     } catch (err) {
-      if (this.showToasts) {
-        this.BdAPI.showToast(`Failed to download and install update for ${this.remotePluginInfo.name}`, { type: 'error'});
-      }
+      this.logger.log('Failed to install update', (err as Error).message);
 
       return false;
     }
