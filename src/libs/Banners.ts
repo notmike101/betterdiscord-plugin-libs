@@ -27,10 +27,10 @@ export class Banners implements BannerInterface {
   protected bannerContainer: HTMLDivElement;
   protected banners: HTMLDivElement[];
 
-  constructor(bannerContainerId: string = 'plugin-banner-container') {
+  constructor(targetContainer: HTMLElement) {
     this.banners = [];
 
-    const existingBannerContainer: HTMLDivElement = document.querySelector('#' + bannerContainerId);
+    const existingBannerContainer: HTMLDivElement = document.querySelector('#plugin-banner-container-c81mc1');
 
     if (!existingBannerContainer) {
       const bannerContainer: HTMLDivElement = document.createElement('div');
@@ -44,9 +44,9 @@ export class Banners implements BannerInterface {
           align-items: center;
           justify-content: center;
         `;
-      this.bannerContainer.id = bannerContainerId;
+      this.bannerContainer.id = 'plugin-banner-container-c81mc1';
 
-      document.querySelector('#app-mount > div[class^="app"] > div[class^="app"]').prepend(this.bannerContainer);
+      targetContainer.prepend(this.bannerContainer);
     } else {
       this.bannerContainer = existingBannerContainer;
     }
