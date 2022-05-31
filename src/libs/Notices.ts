@@ -40,12 +40,14 @@ export class Notices implements NoticeInterface {
   protected noticeContainerBottomRight: HTMLDivElement;
   protected noticeTimers: Tween<any>[];
   protected notices: HTMLDivElement[];
+  protected targetContainer: HTMLElement;
 
-  constructor(noticeContainerId: string) {
+  constructor(noticeContainerId: string, targetContainer: HTMLElement) {
     this.animationLoop = this.animationLoop.bind(this);
 
     this.notices = [];
     this.noticeTimers = [];
+    this.targetContainer = targetContainer;
     this.noticeContainer = this.createNoticeContainer(noticeContainerId ?? 'plugin-notice-container');
     this.noticeContainerTopLeft = this.createAreaContainer(this.noticeContainer, 'top-left');
     this.noticeContainerTopCenter = this.createAreaContainer(this.noticeContainer, 'top-center');
@@ -88,7 +90,7 @@ export class Notices implements NoticeInterface {
       
       noticeContainer.id = noticeContainerId;
 
-      document.querySelector('#app-mount > div[class^="app"] > div[class^="app"]').prepend(noticeContainer);
+      this.targetContainer.prepend(noticeContainer);
     }
 
     return noticeContainer;
