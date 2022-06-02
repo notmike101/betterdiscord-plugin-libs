@@ -2,6 +2,7 @@ export { Notices } from '@/libs/Notices';
 export { Banners } from '@/libs/Banners';
 export { Updater } from '@/libs/Updater';
 export { Logger } from '@/libs/Logger';
+export { DiscordModules } from '@/libs/DiscordModules';
 
 export type {
   BannerOptions,

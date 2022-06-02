@@ -65,7 +65,7 @@ export class Updater implements UpdaterInterface {
 
   public async installUpdate(): Promise<boolean> {
     try {
-      const fs: any = require('fs');
+      const fs: any = await import('fs');
 
       if (!fs) throw new Error('Unable to load `fs` module');
 
