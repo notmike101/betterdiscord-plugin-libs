@@ -3,7 +3,7 @@ export class Logger {
   protected logPrefixColor: string;
   protected logColor: string;
 
-  constructor(logPrefix: string, logPrefixColor: string, logColor: string) {
+  constructor(logPrefix: string, logPrefixColor: string = 'lightblue', logColor: string = 'white') {
     this.logPrefix = logPrefix;
     this.logPrefixColor = logPrefixColor;
     this.logColor = logColor;
