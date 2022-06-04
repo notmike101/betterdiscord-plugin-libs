@@ -46,7 +46,9 @@ export class Banners implements BannerInterface {
         `;
       this.bannerContainer.id = 'plugin-banner-container-c81mc1';
 
-      targetContainer.prepend(this.bannerContainer);
+      if (targetContainer) {
+        targetContainer.prepend(this.bannerContainer);
+      }
     } else {
       this.bannerContainer = existingBannerContainer;
     }
