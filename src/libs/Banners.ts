@@ -54,7 +54,7 @@ export class Banners implements BannerInterface {
     }
   }
 
-  public createBanner(content: string, options: BannerOptions): number {
+  public createBanner(content: string, options: BannerOptions = {}): number {
     const banner: HTMLDivElement = document.createElement('div');
     const bannerText: HTMLSpanElement = document.createElement('span');
     const bannerApprove: HTMLButtonElement = document.createElement('button');
