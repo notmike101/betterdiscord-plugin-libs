@@ -13,6 +13,7 @@ const config = {
   define: {
     'process.env.VERSION': JSON.stringify(packageJson.version),
   },
+  minify: true,
 };
 
 async function main() {
